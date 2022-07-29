@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #tela{
+            width: 50vw;
+            min-width: 500px;
+            height: 80vh;
+            min-height: 700px;
+            margin: auto;
+            border: 2px solid black;
+            position: relative;
+        }
+        #teclado{
+            position: absolute;
+            bottom: 0;
+            margin: 20px;
+        }
+        .button-letter{
+            padding: 10px;
+            width: 45px;
+            margin: 3px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: large;
+            font-weight: bolder;            
+        }
+        #palavra{
+            position: absolute;
+            bottom: 200px;
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            margin: 0 5%;
+
+        }
+        .letterWord{
+            border-bottom: 2px solid black;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            font-weight: bolder;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        #dica{
+            margin: 20px;
+        }
+        #dica p:last-child{
+            border: 2px solid black;
+            width: 150px;
+            height: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /*Inicio Layout do tronco da forca*/
+        #forca{
+            position: absolute;
+            top: 100px;
+            left: 40%;
+        }
+        #wood{
+            width: 25px;
+            height: 200px;
+            background-color: rgb(221, 164, 88);
+            position: relative;
+            border-radius: 10px 10px 2px 2px;
+            border: 2px solid rgb(65, 31, 0);
+        }
+        #wood::after{
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 25px;
+            background-color: rgb(221, 164, 88);
+            border-radius: 20px;
+            border: 2px solid rgb(65, 31, 0);
+        }
+        #wood::before{
+            content: "";
+            position: absolute;
+            width: 25px;
+            height: 60px;
+            background-color: rgb(221, 164, 88);
+            left: 80px;
+            border-radius: 20px;
+            border: 2px solid rgb(65, 31, 0);
+        }
+        /*Fim Layout do tronco da forca*/
+        /*Inicio do Layout do boneco na forca*/
+        .cabeca{
+            transform: translate(80px, -150px);          
+            width: 25px;
+            height: 25px;
+            border-radius: 100%;
+            border: 5px solid rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+        }
+        .corpo{
+            transform: translate(90px, -150px);          
+            width: 5px;
+            height: 60px;
+            border-radius: 100%;
+            border: 5px solid rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+        }
+        .braco-direito{
+            transform: translate(75px, -220px);          
+            width: 5px;
+            height: 60px;
+            border-radius: 100% 0 100% 0;
+            border: 5px solid rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+        }
+        .braco-esquerdo{
+            transform: translate(105px, -290px);          
+            width: 5px;
+            height: 60px;
+            border-radius: 0 100% 0 100%;
+            border: 5px solid rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+        }
+        .perna-direita{
+            transform: translate(75px, -360px);          
+            width: 5px;
+            height: 60px;
+            border-radius: 100% 0 100% 0;
+            border: 5px solid rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+        }
+        .perna-esquerda{
+            transform: translate(105px, -290px);          
+            width: 5px;
+            height: 60px;
+            border-radius: 0 100% 0 100%;
+            border: 5px solid rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+
+        }
+        .active{
+            opacity: 0;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+    <div id="tela">
+
+        <div id="forca">
+            <div id="wood"></div>
+            <div class="active cabeca"></div>
+            <div class="active corpo"></div>
+            <div class="active braco-direito"></div>
+            <div class="active braco-esquerdo"></div>            
+            <div class="active perna-esquerda"></div>
+            <div class="active perna-direita"></div>
+        </div>
+        <div id="dica">
+            <p>Dica:</p><p id="textDica"></p>
+        </div>
+        
+        <div id="palavra"></div>
+        <div id="teclado"></div>
+        
+    </div>
+    <script>
+        (function(){        
+            
+            var jobs = ["Apicultor","Agrônomo","Auditor","Bartender","Cerimonialista","Chef","Coach",
+            "Desembargador","Despachante","Endocrinologista","Embaixador","Headhunter","Interprete",
+            "Juiz","Nanotecnologo","Nutrologo","Pizzaiolo","Perito","Quiroprata","Trader"];
+            var animals = ["Albatroz","Alpaca","Anchova","Bacalhau","Beluga","Chinchila","Dromedario","Escaravelho",
+            "Hamster","Lemure","Lhama","Lince","Marreco","Ouriço","Pelicano","Percevejo"];
+            var objects = ["Ampulheta","Anzol","Botija","Candelabro","Desfibrilador","Fantoche","Freezer",
+            "Navalha","Jaleco","Modem","Narguile","Nebulizador"];
+            var words = new Array;
+            words.push(jobs, animals, objects);
+
+
+            var alfabeto = ["q","w","e","r","t","y","u","i","o","p","a","s","d","f","g","h","j","k","l","ç","z","x","c","v","b","n","m"];           
+            for(let i = 0; i < alfabeto.length; i++){ /*gerar o teclado*/
+                var button = document.createElement("button");
+                var textInButton = document.createTextNode(alfabeto[i].toUpperCase());
+                button.appendChild(textInButton);                
+                button.classList.add("button-letter")
+                button.addEventListener("click", selectLetter);
+                var $teclado = document.getElementById("teclado");
+                $teclado.appendChild(button);
+            };
+            
+            
+            $textDica = document.getElementById("textDica"); /*insere a informação da dica*/
+            
+
+            var indice = 1; /*indice utilizado para quantidade de erros*/
+            function selectLetter(){ /*função executada ao clicar na letra*/
+                var $divWord = document.querySelectorAll(".letterWord");
+                var acerto = false;
+                    for(let i = 0; i< wordString.length; i++){  /*se digitar certo*/
+                        if(wordString[i].toUpperCase() == this.textContent){
+                            $divWord[i].textContent = this.textContent;
+                            this.style.background = "green";
+                            acerto = true;
+                        }
+                    } 
+
+                var divs = document.querySelector("#forca").querySelectorAll('div');  
+                    if(acerto === false){ /*se digitar errado*/
+                            divs[indice].classList.toggle("active");
+                            console.log(divs[indice]);
+                            indice++;
+                            this.style.background = "red";
+                        }
+            }
+
+            let wordString = "";
+            nextWord();
+            function nextWord(){ /*seleciona e adiciciona a nova palavra*/
+                let selectGroup = countAleatory(words);    
+                let selectWord = 0;
+                
+                
+                switch(selectGroup){
+                    case 0:  
+                    selectWord = countAleatory(jobs);
+                    wordString = jobs[selectWord];                    
+                    $textDica.textContent = "Profissão";                    
+
+                    break
+                    case 1:  
+                    selectWord = countAleatory(animals);
+                    wordString = animals[selectWord];
+                    $textDica.textContent = "Animal";
+
+                    break
+                    case 2:  
+                    selectWord = countAleatory(objects);
+                    wordString = objects[selectWord];
+                    $textDica.textContent = "Objeto";
+
+                    break
+                }
+                console.log(wordString);
+                insertDivWord(wordString);
+            }
+
+            function countAleatory(list){return parseInt(Math.random()*list.length)} /*retorna um numero aleatorio com base na array*/
+                
+            function insertDivWord(word){ /*insere a palavra selecionada no HTML*/
+                var $palavra = document.getElementById("palavra");
+                    for(let i = 0; i< word.length; i++){
+                    let div = document.createElement("div");
+                    div.classList.add("letterWord");
+                    $palavra.appendChild(div);
+                    }
+           }
+        
+
+        })();
+
+
+    </script>
+</body>
+</html>
